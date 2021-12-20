@@ -3,7 +3,7 @@ package implementations;
 import java.util.Random;
 import ea.Individual;
 import ea.Selector;
-//import ea.Population;
+import ea.Population;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -49,55 +49,13 @@ public class ESBoidPopulation implements Population{//extends Population{
 	// will attempt to do inter-species breeding
 	// and a runtime error will most likely occur.
 	//@Override
-	public ESBoidPopulation(ESBoidIndividual[] offspringPop) {
-	
-	#this constructor sets up the offspring instead of the population
-	#there should be a selector to populate the offspring population.
-	
-	#TODO: merge this in with constructor (Individual[], selector) so the two use very similar code
-	#possible extra option: use default ESSelector to call constructor (Individual[], selector) instead
-	
-	#have it implement the Population class
-	#from there, have it send the parent class to the runner file
-	#after that, repopulate using the child class
-	#the trouble may be to make all this easily accessible and work together well
-	
-    minFit = 0;
-    maxFit = 0;
-    maxOffFit = 0;
-    maxParFit = 0;
-    avgFit = 0;
-    avgOffFit = 0;
-    //super(offspringPop);
-		
-	//do a small test to see if correct pop is used
-	if (offspringPop.length%numOffspring != 0){
-		System.out.println("Warning: normal constructor called with strange length, use ESBoidPopulation(ESBoidIndividual[], Selector) method instead");
-	}
-	
-	popsize = offspringPop.length/numOffspring;
-	
-	gen = 0;
-	pop = new ESBoidIndividual[popsize];
-	offspring = new ESBoidIndividual[popsize*numoffspring];
-	pop_temp = new ESBoidIndividual[popsize];//*numoffspring
-	
-	for (int i = 0; i < popsize; i++) {
-		if (i < popsize){pop[i] = offspringPop[i];}
-		offspring[i] = offspringPop[i];
-		}
-	
-		selector.update(this);
-		repopulate(selector);
-		updateStats();
-	}
-	
-	public ESBoidPopulation(ESBoidIndividual[] population, Selector selector) {
-	
-	#have it implement the Population class
-	#from there, have it send the parent class to the runner file
-	#after that, repopulate using the child class
-	#the trouble may be to make all this easily accessible and work together well
+
+  public ESBoidPopulation(ESBoidIndividual[] population, Selector selector) {
+    
+    //have it implement the Population class
+    //from there, have it send the parent class to the runner file
+    //after that, repopulate using the child class
+    //the trouble may be to make all this easily accessible and work together well
     minFit = 0;
     maxFit = 0;
     maxOffFit = 0;
@@ -105,24 +63,72 @@ public class ESBoidPopulation implements Population{//extends Population{
     avgFit = 0;
     avgOffFit = 0;
     //super(population);
-		
-	//probably unnecessary 
-	popsize = population.length;
-	
-	gen = 0;
-	pop = new ESBoidIndividual[popsize];
-	for (int i = 0; i < popsize; i++) pop[i] = population[i];//new ESBoidIndividual(population[i]);
-	
-	//end probably unnecessary
-	
-	offspring = new ESBoidIndividual[popsize*numoffspring];
-	pop_temp = new ESBoidIndividual[popsize];//*numoffspring
+      
+    //probably unnecessary 
+    popsize = population.length;
+    
+    gen = 0;
+    pop = new ESBoidIndividual[popsize];
+    for (int i = 0; i < popsize; i++) pop[i] = population[i];//new ESBoidIndividual(population[i]);
+    
+    //end probably unnecessary
+    
+    offspring = new ESBoidIndividual[popsize*numoffspring];
+    pop_temp = new ESBoidIndividual[popsize];//*numoffspring
 
-	selector.update(this);
+    selector.update(this);
     repopulate(selector);
     updateStats();
+  }
+  
+	public ESBoidPopulation(ESBoidIndividual[] population) {
+	  this(population, new ESSelector());
+		//ESSelector selector = new ESSelector();
+    //  this = new ESBoidPopulation(population, selector);
+    //this;
+		//ESBoidPopulation();
+		
+		// #this constructor sets up the offspring instead of the population
+		// #there should be a selector to populate the offspring population.
+		
+		// #TODO: merge this in with constructor (Individual[], selector) so the two use very similar code
+		// #possible extra option: use default ESSelector to call constructor (Individual[], selector) instead
+		
+		// #have it implement the Population class
+		// #from there, have it send the parent class to the runner file
+		// #after that, repopulate using the child class
+		// #the trouble may be to make all this easily accessible and work together well
+		
+		// minFit = 0;
+		// maxFit = 0;
+		// maxOffFit = 0;
+		// maxParFit = 0;
+		// avgFit = 0;
+		// avgOffFit = 0;
+		// //super(offspringPop);
+			
+		// //do a small test to see if correct pop is used
+		// if (offspringPop.length%numOffspring != 0){
+			// System.out.println("Warning: normal constructor called with strange length, use ESBoidPopulation(ESBoidIndividual[], Selector) method instead");
+		// }
+		
+		// popsize = offspringPop.length/numOffspring;
+		
+		// gen = 0;
+		// pop = new ESBoidIndividual[popsize];
+		// offspring = new ESBoidIndividual[popsize*numoffspring];
+		// pop_temp = new ESBoidIndividual[popsize];//*numoffspring
+		
+		// for (int i = 0; i < popsize; i++) {
+			// if (i < popsize){pop[i] = offspringPop[i];}
+			// offspring[i] = offspringPop[i];
+			// }
+		
+			// selector.update(this);
+			// repopulate(selector);
+			// updateStats();
 	}
-	
+
 	// getter for individual
     public ESBoidIndividual getIndividual(int index) {
         return (ESBoidIndividual) pop[index];
@@ -152,11 +158,11 @@ public class ESBoidPopulation implements Population{//extends Population{
 	// // selection mechanism specificed by selector.
 	public void runGeneration(Selector selector) {
 		
-	selector.update(this);
+	  selector.update(this);
     updateStats();
-	repopulate(selector);
-	gen++;
-		
+  	repopulate(selector);
+  	gen++;
+  		
 	}
 	
 	// public ESBoidIndividual at(int index) { return pop[index]; }
@@ -181,7 +187,7 @@ public class ESBoidPopulation implements Population{//extends Population{
 	
 	//public int offSize() { return offspring.length; }
   
-	public int generation() { return gen; }
+	public int getGeneration() { return gen; }
 	
 	public static int getNumOffspring() {return numoffspring; }
 	
@@ -199,10 +205,6 @@ public class ESBoidPopulation implements Population{//extends Population{
 		return offspring[indPos].getTrial(trial);
 	}
 
-	//best individual is not implemented, but combines a sorted parent and child
-	
-	//TODO - how is the best individual chosen continuously? the list isn't sorted
-	//implementation seems to work TODO - possibly improve
 	public ESBoidIndividual getBestIndividual() { 
 		if (offspring[bestOffspring].fitness() > pop[bestParent].fitness()) {return offspring[bestOffspring];}
 		else {return pop[bestParent];}
