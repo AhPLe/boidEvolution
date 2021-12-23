@@ -48,90 +48,54 @@ public class ESBoidPopulation implements Population{//extends Population{
 	// same class type; otherwise, the algorithm
 	// will attempt to do inter-species breeding
 	// and a runtime error will most likely occur.
-	//@Override
+	// @Override
 
-  public ESBoidPopulation(ESBoidIndividual[] population, Selector selector) {
-    
-    //have it implement the Population class
-    //from there, have it send the parent class to the runner file
-    //after that, repopulate using the child class
-    //the trouble may be to make all this easily accessible and work together well
-    minFit = 0;
-    maxFit = 0;
-    maxOffFit = 0;
-    maxParFit = 0;
-    avgFit = 0;
-    avgOffFit = 0;
-    //super(population);
-      
-    //probably unnecessary 
-    popsize = population.length;
-    
-    gen = 0;
-    pop = new ESBoidIndividual[popsize];
-    for (int i = 0; i < popsize; i++) pop[i] = population[i];//new ESBoidIndividual(population[i]);
-    
-    //end probably unnecessary
-    
-    offspring = new ESBoidIndividual[popsize*numoffspring];
-    pop_temp = new ESBoidIndividual[popsize];//*numoffspring
+	public ESBoidPopulation(ESBoidIndividual[] population, Selector selector) {
+		
+		//have it implement the Population class
+		//from there, have it send the parent class to the runner file
+		//after that, repopulate using the child class
+		//the trouble may be to make all this easily accessible and work together well
+		minFit = 0;
+		maxFit = 0;
+		maxOffFit = 0;
+		maxParFit = 0;
+		avgFit = 0;
+		avgOffFit = 0;
+		//super(population);
+		  
+		//probably unnecessary 
+		popsize = population.length;
+		
+		gen = 0;
+		pop = new ESBoidIndividual[popsize];
+		for (int i = 0; i < popsize; i++) pop[i] = population[i];//new ESBoidIndividual(population[i]);
+		
+		//end probably unnecessary
+		
+		offspring = new ESBoidIndividual[popsize*numoffspring];
+		pop_temp = new ESBoidIndividual[popsize];//*numoffspring
 
-    selector.update(this);
-    repopulate(selector);
-    updateStats();
-  }
-  
+		selector.update(this);
+		repopulate(selector);
+		updateStats();
+	}
+	
+	@Override
 	public ESBoidPopulation(ESBoidIndividual[] population) {
 	  this(population, new ESSelector());
-		//ESSelector selector = new ESSelector();
-    //  this = new ESBoidPopulation(population, selector);
-    //this;
-		//ESBoidPopulation();
-		
-		// #this constructor sets up the offspring instead of the population
-		// #there should be a selector to populate the offspring population.
-		
-		// #TODO: merge this in with constructor (Individual[], selector) so the two use very similar code
-		// #possible extra option: use default ESSelector to call constructor (Individual[], selector) instead
-		
-		// #have it implement the Population class
-		// #from there, have it send the parent class to the runner file
-		// #after that, repopulate using the child class
-		// #the trouble may be to make all this easily accessible and work together well
-		
-		// minFit = 0;
-		// maxFit = 0;
-		// maxOffFit = 0;
-		// maxParFit = 0;
-		// avgFit = 0;
-		// avgOffFit = 0;
-		// //super(offspringPop);
-			
-		// //do a small test to see if correct pop is used
-		// if (offspringPop.length%numOffspring != 0){
-			// System.out.println("Warning: normal constructor called with strange length, use ESBoidPopulation(ESBoidIndividual[], Selector) method instead");
-		// }
-		
-		// popsize = offspringPop.length/numOffspring;
-		
-		// gen = 0;
-		// pop = new ESBoidIndividual[popsize];
-		// offspring = new ESBoidIndividual[popsize*numoffspring];
-		// pop_temp = new ESBoidIndividual[popsize];//*numoffspring
-		
-		// for (int i = 0; i < popsize; i++) {
-			// if (i < popsize){pop[i] = offspringPop[i];}
-			// offspring[i] = offspringPop[i];
-			// }
-		
-			// selector.update(this);
-			// repopulate(selector);
-			// updateStats();
 	}
-
-	// getter for individual
-    public ESBoidIndividual getIndividual(int index) {
+	
+	public ESBoidIndividual getParent(int index) {
         return (ESBoidIndividual) pop[index];
+	}
+	
+	// getter for individual
+	// with the ES code, the individual returned for simulation should be getIndividual, unless specifically called for parent above
+    @Override
+	public ESBoidIndividual getIndividual(int index) {
+        return getOffspring(index);
+		// return (ESBoidIndividual) pop[index];
     }
     
     public ESBoidIndividual getOffspring(int index) {
@@ -156,12 +120,13 @@ public class ESBoidPopulation implements Population{//extends Population{
 	
 	// // Simulates one generation using the parent
 	// // selection mechanism specificed by selector.
+	@Override
 	public void runGeneration(Selector selector) {
 		
-	  selector.update(this);
-    updateStats();
-  	repopulate(selector);
-  	gen++;
+		selector.update(this);
+		updateStats();
+		repopulate(selector);
+		gen++;
   		
 	}
 	
@@ -173,28 +138,33 @@ public class ESBoidPopulation implements Population{//extends Population{
 	
 	// public double minFitness() { return minFit; }
 	
+	@Override
 	public double maxFitness() { return maxFit; }
 
 	public double maxOffFitness() { return maxOffFit; }
 
 	public double maxParFitness() { return maxParFit; }
-
+	
+	@Override
 	public double avgFitness() { return avgFit; }
 
 	public double avgOffFitness() { return avgOffFit; }
-
+	
+	@Override
 	public int size() { return pop.length; }
 	
 	//public int offSize() { return offspring.length; }
-  
+	
+	@Override
 	public int getGeneration() { return gen; }
 	
 	public static int getNumOffspring() {return numoffspring; }
 	
+	@Override
 	public ESBoidIndividual at(int pos) {return pop[pos];}
 
-	public void setIndTrial(int indPos, int trial, int fitness){
-		pop[indPos].setTrial(trial, fitness);
+	public void setParTrial(int parPos, int trial, int fitness){
+		pop[parPos].setTrial(trial, fitness);
 	}
 
 	public void setOffTrial(int indPos, int trial, int fitness){
@@ -204,7 +174,8 @@ public class ESBoidPopulation implements Population{//extends Population{
 	public double getOffTrial(int indPos, int trial){
 		return offspring[indPos].getTrial(trial);
 	}
-
+	
+	@Override
 	public ESBoidIndividual getBestIndividual() { 
 		if (offspring[bestOffspring].fitness() > pop[bestParent].fitness()) {return offspring[bestOffspring];}
 		else {return pop[bestParent];}
@@ -223,7 +194,7 @@ public class ESBoidPopulation implements Population{//extends Population{
 		// }
 	// }
 	
-	//@Override - this should be inherited from population, but it is not
+	@Override
 	protected void repopulate(Selector selector) {
 		if (offspring[0] != null){
 			childSorted = false;
@@ -242,16 +213,12 @@ public class ESBoidPopulation implements Population{//extends Population{
 				Arrays.sort(offspring, new sortByFitness());
 				childSorted = true;
 			}
-      
-			//System.out.println("Post sort best: "+ offspring[0].ESString());
-			//System.out.println("Post sort worst: "+ offspring[offspring.length - 1].ESString());
-		  
-		  
+			
 			double childFit;
 			double parentFit;
 			// ESBoidIndividual bestOffspring;
 			// ESBoidIndividual bestParent;
-		  
+			
 			int parPos = 0;
 			int childPos = 0;
 			if (!muplus){
@@ -393,10 +360,12 @@ public class ESBoidPopulation implements Population{//extends Population{
 		
 		// if (minParFit < minFit){ minFit = minParFit;}
 		// if (maxParFit > maxFit){ maxFit = maxParFit;}
-		
+    String formString = "%1$.2f";
+		System.out.println(String.format("pre avgFit " + formString, avgFit));
 		avgFit /= (double)popsize;
+    System.out.println(String.format("pre avgFit " + formString, avgFit));
 	}
-	
+	;;
 	//@Override
 	protected void updateStats() {
     //System.out.println("update occurs" + Double.toString(avgOffFit));

@@ -7,7 +7,7 @@ import implementations.FileWritePopulation;
 
 int fit;
 
-final int FRAME_LIMIT = 500;//TODO 500
+final int FRAME_LIMIT = 500;
 final int POPULATION_SIZE = 6; // MUST BE SAME IN BoidIndividual
 final int MAX_GENERATIONS = 35;
 final int NUM_TRIALS = 5; // MUST BE SAME AS IN BoidIndividual
@@ -47,7 +47,8 @@ Sim s;
 
         if (simulationCounter == 0) {
             // create first sim
-            s = new Sim(predatorPopulation.getIndividual(0).getGenome(), preyPopulation.getIndividual(0).getGenome());
+			      //TODO - decide if getOffspring is the correct way to simulate
+            s = new Sim(predatorPopulation.getOffspring(0).getGenome(), preyPopulation.getOffspring(0).getGenome());
         }
 
         if (generationCounter >= MAX_GENERATIONS) {
@@ -144,12 +145,14 @@ Sim s;
             // reeset simulation
             background(255,0,0);
             frameCount = 0;
+			      //TODO - decide if getOffspring is the correct way to simulate
             if (simulationCounter <= POPULATION_SIZE - 1) {
 				      s = new Sim(predatorPopulation.getOffspring(simulationCounter).getGenome(), preyPopulation.getOffspring(simulationCounter).getGenome());
             }
 			  }
+			  //TODO - decide if getOffspring is the correct way to simulate
 			  if (simulationCounter == POPULATION_SIZE){
-				  //s = new Sim(predatorPopulation.getIndividual(simulationCounter).getGenome(), preyPopulation.getIndividual(simulationCounter).getGenome());
+				  //s = new Sim(predatorPopulation.getOffspring(simulationCounter).getGenome(), preyPopulation.getOffspring(simulationCounter).getGenome());
 			    
             // END OF TRIAL
             // reset simulation counter
